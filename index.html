@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>Punto de Venta</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            padding: 20px;
+        }
+        .products {
+            flex: 3;
+            padding: 20px;
+        }
+        .cart {
+            flex: 1;
+            padding: 20px;
+            border-left: 1px solid #ccc;
+        }
+        .cart .cart-item {
+            margin-bottom: 10px;
+        }
+        .cart-total {
+            margin-top: 20px;
+        }
+        .btn {
+            background-color: #009688;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 200px;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            background-color: #00796b;
+        }
+        img {
+            width: 200px;
+            height: 200px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: #00a1a7;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Facturar - Productos</h1>
+    </header>
+    <div class="container">
+        <div class="products">
+            <div>
+                <p><img src="./assets/images/american.jpg" alt="Americano"></p>
+                <p>Americano - $2000 (Stock: 5)</p>
+                <button class="btn" onclick="addToCart('Americano', 2000, 5)">Agregar producto</button>
+            </div>
+            <div>
+                <p><img src="./assets/images/american.jpg" alt="Americano Doble"></p>
+                <p>Americano Doble - $5000 (Stock: 3)</p>
+                <button class="btn" onclick="addToCart('Americano Doble', 5000, 3)">Agregar producto</button>
+            </div>
+        </div>
+        <div class="cart">
+            <h2>Ticket de venta</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                Total: $<span id="cart-total">0</span>
+            </div>
+            <button class="btn" id="paymentBtn">Método de pago</button>
+        </div>
+    </div>
+    <footer>
+        <div><h2>Ing. Jose Chacón</h2></div>
+    </footer>
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Selecciona el método de pago</h2>
+            <button class="btn" onclick="selectPaymentMethod('Tarjeta de Crédito')">Tarjeta de Crédito</button>
+            <button class="btn" onclick="selectPaymentMethod('Tarjeta de Débito')">Tarjeta de Débito</button>
+            <button class="btn" onclick="selectPaymentMethod('Efectivo')">Efectivo</button>
+        </div>
+    </div>
+    <div id="dynamicMessageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMessageModal()">&times;</span>
+            <p id="dynamicMessageText">Cargando...</p>
+            <button id="changePaymentMethodBtn" class="btn" style="display:none;" onclick="changePaymentMethod()">Cambiar Método de Pago</button>
+        </div>
+    </div>
+    <script>
+        let cart = {};
+        let total = 0;
+        let operationId = null;
+        function addToCart(product, price, stock) {
+            if (cart[product] && cart[product].quantity >= stock) {
+                alert(`No hay suficiente stock para agregar más ${product}.`);
+                return;
+            }
+
+            if (cart[product]) {
+                cart[product].quantity++;
+                cart[product].totalPrice += price;
+            } else {
+                cart[product] = { quantity: 1, price, totalPrice: price };
+            }
+            total += price;
+            updateCart();
+        }
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            for (let product in cart) {
+                const item = cart[product];
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerText = `${product} x ${item.quantity} - $${item.totalPrice}`;
+                cartItems.appendChild(cartItem);
+            }
+            document.getElementById('cart-total').innerText = total.toFixed(0);
+        }
+        document.getElementById('paymentBtn').onclick = () => {
+            document.getElementById('paymentModal').style.display = 'block';
+        };
+        document.getElementById('closeModal').onclick = () => {
+            document.getElementById('paymentModal').style.display = 'none';
+        };
+        function showMessageModal(message) {
+            document.getElementById('dynamicMessageText').textContent = message;
+            document.getElementById('dynamicMessageModal').style.display = 'block';
+
+            if (message.includes('Abriendo máquina para pago en efectivo...')) {
+                document.getElementById('changePaymentMethodBtn').style.display = 'block';
+            } else {
+                document.getElementById('changePaymentMethodBtn').style.display = 'none';
+            }
+        }
+        function closeMessageModal() {
+            document.getElementById('dynamicMessageModal').style.display = 'none';
+        }
+        function selectPaymentMethod(method) {
+            document.getElementById('paymentModal').style.display = 'none';
+            if (method === 'Efectivo') {
+                showMessageModal('Abriendo máquina para pago en efectivo...');
+                let amount = total * 100;
+                const startOperationUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=startOperation&name=admin&password=1&type=4&posid=terminal2&parameters={"amount":"${amount}"}&startnow=true&posuser=Jose`;
+
+                fetch(startOperationUrl, { method: 'GET' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code !== 1) throw new Error(`Error: ${data.response.errorMessage}`);
+                        operationId = data.response.operation.operationId;
+
+                        const acknowledgeUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=acknowledgeOperationId&name=admin&password=1&operationId=${operationId}`;
+                        return fetch(acknowledgeUrl, { method: 'GET' });
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code !== 1) throw new Error(`Error: ${data.response.errorMessage}`);
+                        monitorTransactionStatus();
+                    })
+                    .catch(error => {
+                        showMessageModal(`Error: ${error.message}`);
+                    });
+            } else {
+                showMessageModal(`Procesando pago con ${method}...`);
+                setTimeout(() => {
+                    alert(`Pago con ${method} completado.`);
+                    resetCart();
+                }, 2000);
+            }
+        }
+
+        function monitorTransactionStatus() {
+            const checkStatusUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=askOperation&name=admin&password=1&operationId=${operationId}`;
+
+            function checkState() {
+                fetch(checkStatusUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        const state = data.response.operation.state;
+
+                        if (state === "I") {
+                            alert('Estado inesperado. Revisar.');                        
+                        } else if (state === "E") {
+                            alert('Transacción en ejecución.');
+                            setTimeout(checkState, 2000); // Reintentar después de 2 segundos
+                        } else if(state === "F"){
+                            alert('Transacción finalizada.');
+                            resetCart();   
+                        }
+                    } else {
+                        showMessageModal('Error al consultar estado de la transacción.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud:', error);
+                });
+            }
+            checkState();
+        }
+        function changePaymentMethod() {
+            if (!operationId) {
+                alert("No se ha iniciado ninguna operación.");
+                return;
+            }
+
+            const finishOperationUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=finishOperation&name=admin&password=1&type=2&operationId=${operationId}`;
+    
+            fetch(finishOperationUrl, { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code !== 1) throw new Error(`Error: ${data.response.errorMessage}`);
+                    alert('Transacción cancela...');
+                    //resetCart();
+                })
+                .catch(error => {
+                    showMessageModal(`Error: ${error.message}`);
+            });
+        }
+        function resetCart() {
+            cart = {};
+            total = 0;
+            updateCart();
+            closeMessageModal();
+        }
+    </script>
+</body>
+</html>
+
+
+
+
