@@ -189,7 +189,7 @@
             if (method === 'Efectivo') {
                 showMessageModal('Abriendo máquina para pago en efectivo...');
                 let amount = total * 100;
-                const startOperationUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=startOperation&name=admin&password=1&type=4&posid=terminal2&parameters={"amount":"${amount}"}&startnow=true&posuser=Jose`;
+                const startOperationUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=startOperation&name=admin&password=1&type=4&posid=terminal2&parameters={"amount":"${amount}"}&startnow=true&posuser=Jose`;
 
                 fetch(startOperationUrl, { method: 'GET' })
                     .then(response => response.json())
@@ -197,7 +197,7 @@
                         if (data.code !== 1) throw new Error(`Error: ${data.response.errorMessage}`);
                         operationId = data.response.operation.operationId;
 
-                        const acknowledgeUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=acknowledgeOperationId&name=admin&password=1&operationId=${operationId}`;
+                        const acknowledgeUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=acknowledgeOperationId&name=admin&password=1&operationId=${operationId}`;
                         return fetch(acknowledgeUrl, { method: 'GET' });
                     })
                     .then(response => response.json())
@@ -218,7 +218,7 @@
         }
 
         function monitorTransactionStatus() {
-            const checkStatusUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=askOperation&name=admin&password=1&operationId=${operationId}`;
+            const checkStatusUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=askOperation&name=admin&password=1&operationId=${operationId}`;
 
             function checkState() {
                 fetch(checkStatusUrl)
@@ -252,7 +252,7 @@
                 return;
             }
 
-            const finishOperationUrl = `https://190.145.93.236/Cashdro3WS/index3.php?operation=finishOperation&name=admin&password=1&type=2&operationId=${operationId}`;
+            const finishOperationUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=finishOperation&name=admin&password=1&type=2&operationId=${operationId}`;
     
             fetch(finishOperationUrl, { method: 'GET' })
                 .then(response => response.json())
