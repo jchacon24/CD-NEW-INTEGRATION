@@ -140,7 +140,7 @@
             </div>
             <div>
                 <p><img src="./assets/images/american.jpg" alt="Americano Doble"></p>
-                <p>Americano Doble - $5000 </p>
+                <p>A. Doble - $5000 </p>
                 <button class="btn" onclick="addToCart('Americano Doble', 5000, 8)">Agregar producto</button>
             </div>
             <div>
@@ -152,7 +152,7 @@
             </div>
             <div>
                 <p><img src="./assets/images/fanta-naranja.webp" alt=""></p>
-                <p>Fanta Naranja - $4000</p>
+                <p>F. Naranja - $4000</p>
                 <button class="btn btn-gray" onclick="addToCart('Fanta Naranja', 4000, 10)">
                     Agregar producto
                 </button>
@@ -276,7 +276,7 @@
                         //Mostrar frame con estado visual
                         const frame = document.getElementById("cashdroFrame");
                         frame.style.display = "block";
-                        frame.src = `http://192.168.2.118/Cashdro3Web/#/progresssale/true/${operationId}`;
+                        frame.src = `https://192.168.2.118/Cashdro3Web/#/progresssale/true/${operationId}`;
 
                         const acknowledgeUrl = `https://192.168.2.118/Cashdro3WS/index3.php?operation=acknowledgeOperationId&name=admin&password=1&operationId=${operationId}`;
                         return fetch(acknowledgeUrl, { method: 'GET' });
