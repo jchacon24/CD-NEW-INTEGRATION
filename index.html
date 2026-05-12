@@ -277,7 +277,8 @@
                         //Mostrar frame con estado visual
                         const frame = document.getElementById("cashdroFrame");
                         frame.style.display = "block";
-                        frame.src = `http://192.168.2.118/Cashdro3Web/#/progresssale/true/${operationId}`;
+                        //frame.src = `http://192.168.2.118/Cashdro3Web/#/progresssale/true/${operationId}`;
+                        frame.src = `http://192.168.2.118/Cashdro3Web/index.html#/splash/true`;
 
                         const acknowledgeUrl = `http://192.168.2.118/Cashdro3WS/index3.php?operation=acknowledgeOperationId&name=admin&password=1&operationId=${operationId}`;
                         return fetch(acknowledgeUrl, { method: 'GET' });
