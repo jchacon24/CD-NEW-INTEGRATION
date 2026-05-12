@@ -318,7 +318,7 @@
                             if (frame.style.display !== "block") {
                                 frame.style.display = "block";
                             }                        
-                            setTimeout(checkState, 2000);
+                            setTimeout(checkState, 900);
                         } else if(state === "F"){
                             alert('Transacción finalizada.');
                             resetCart();   
@@ -338,19 +338,33 @@
                 alert("No se ha iniciado ninguna operación.");
                 return;
             }
-
+        
             const finishOperationUrl = `https://192.168.2.118/Cashdro3WS/index3.php?operation=finishOperation&name=admin&password=1&type=2&operationId=${operationId}`;
-    
+        
             fetch(finishOperationUrl, { method: 'GET' })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.code !== 1) throw new Error(`Error: ${data.response.errorMessage}`);
-                    alert('Transacción cancela...');
-                    //resetCart();
+                    if (data.code !== 1) {
+                        throw new Error(`Error: ${data.response.errorMessage}`);
+                    }
+        
+                    // Cerrar modal
+                    closeMessageModal();
+        
+                    // Ocultar frame
+                    const frame = document.getElementById("cashdroFrame");
+                    frame.style.display = "none";
+                    frame.src = "";
+        
+                    // Limpiar operación
+                    operationId = null;
+        
+                    alert('Transacción cancelada correctamente.');
+        
                 })
                 .catch(error => {
                     showMessageModal(`Error: ${error.message}`);
-            });
+                });
         }
         function resetCart() {
             cart = {};
