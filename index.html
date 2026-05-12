@@ -130,7 +130,42 @@
             <div>
                 <p><img src="./assets/images/american.jpg" alt="Americano Doble"></p>
                 <p>Americano Doble - $5000 (Stock: 3)</p>
-                <button class="btn" onclick="addToCart('Americano Doble', 5000, 3)">Agregar producto</button>
+                <button class="btn" onclick="addToCart('Americano Doble', 5000, 8)">Agregar producto</button>
+            </div>
+            <div>
+                <p><img src="./assets/images/jugo_hit.jpg" alt=""></p>
+                <p>Jugo Hit - $2800</p>
+                <button class="btn btn-gray" onclick="addToCart('Jugo Hit', 2800, 15)">
+                    Agregar producto
+                </button>
+            </div>
+            <div>
+                <p><img src="./assets/images/fanta-naranja.webp" alt=""></p>
+                <p>Fanta Naranja - $4000</p>
+                <button class="btn btn-gray" onclick="addToCart('Fanta Naranja', 4000, 10)">
+                    Agregar producto
+                </button>
+            </div>
+            <div>
+                <p><img src="./assets/images/sprite.webp" alt=""></p>
+                <p>Sprite - $3000</p>
+                <button class="btn btn-gray" onclick="addToCart('Sprite', 3000, 11)">
+                    Agregar producto
+                </button>
+            </div>
+            <div>
+                <p><img src="./assets/images/coca.webp" alt=""></p>
+                <p>Coca-Cola - $6000</p>
+                <button class="btn btn-gray" onclick="addToCart('Sprite', 6000, 9)">
+                    Agregar producto
+                </button>
+            </div>
+            <div>
+                <p><img src="./assets/images/agua.png" alt=""></p>
+                <p>Agua - $2500</p>
+                <button class="btn btn-gray" onclick="addToCart('Agua', 2500, 14)">
+                    Agregar producto
+                </button>
             </div>
         </div>
         <div class="cart">
@@ -216,7 +251,7 @@
             if (method === 'Efectivo') {
                 showMessageModal('Abriendo máquina para pago en efectivo...');
                 let amount = total * 100;
-                const startOperationUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=startOperation&name=admin&password=1&type=4&posid=terminal2&parameters={"amount":"${amount}"}&startnow=true&posuser=Jose`;
+                const startOperationUrl = `https://192.168.2.118/Cashdro3WS/index3.php?operation=startOperation&name=admin&password=1&type=4&posid=terminal2&parameters={"amount":"${amount}"}&startnow=true&posuser=Jose`;
 
                 fetch(startOperationUrl, { method: 'GET' })
                     .then(response => response.json())
@@ -224,7 +259,7 @@
                         if (data.code !== 1) throw new Error(`Error: ${data.response.errorMessage}`);
                         operationId = data.response.operation.operationId;
 
-                        const acknowledgeUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=acknowledgeOperationId&name=admin&password=1&operationId=${operationId}`;
+                        const acknowledgeUrl = `https://192.168.2.118/Cashdro3WS/index3.php?operation=acknowledgeOperationId&name=admin&password=1&operationId=${operationId}`;
                         return fetch(acknowledgeUrl, { method: 'GET' });
                     })
                     .then(response => response.json())
@@ -245,7 +280,7 @@
         }
 
         function monitorTransactionStatus() {
-            const checkStatusUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=askOperation&name=admin&password=1&operationId=${operationId}`;
+            const checkStatusUrl = `https://192.168.2.118/Cashdro3WS/index3.php?operation=askOperation&name=admin&password=1&operationId=${operationId}`;
 
             function checkState() {
                 fetch(checkStatusUrl)
@@ -279,7 +314,7 @@
                 return;
             }
 
-            const finishOperationUrl = `https://192.168.0.105/Cashdro3WS/index3.php?operation=finishOperation&name=admin&password=1&type=2&operationId=${operationId}`;
+            const finishOperationUrl = `https://192.168.2.118/Cashdro3WS/index3.php?operation=finishOperation&name=admin&password=1&type=2&operationId=${operationId}`;
     
             fetch(finishOperationUrl, { method: 'GET' })
                 .then(response => response.json())
