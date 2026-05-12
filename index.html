@@ -325,7 +325,8 @@
                             setTimeout(checkState, 900);
                         } else if(state === "F"){
                             alert('Transacción finalizada.');
-                            resetCart();   
+                            resetCart(); 
+                            operationId = null;
                         }
                     } else {
                         showMessageModal('Error al consultar estado de la transacción.');
@@ -379,6 +380,7 @@
             const frame = document.getElementById("cashdroFrame");
             frame.style.display = "none";
             frame.src = "";
+            operationId = null;
         }
         //Exponer funciones al scope global para que los onclick funcionen
         window.addToCart = addToCart;
