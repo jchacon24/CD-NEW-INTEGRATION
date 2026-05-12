@@ -218,6 +218,7 @@
         let cart = {};
         let total = 0;
         let operationId = null;
+        let monitoring = false;
         function addToCart(product, price, stock) {
             if (cart[product] && cart[product].quantity >= stock) {
                 alert(`No hay suficiente stock para agregar más ${product}.`);
@@ -303,6 +304,7 @@
         }
 
         function monitorTransactionStatus() {
+            monitoring = true;
             const checkStatusUrl = `https://192.168.2.118/Cashdro3WS/index3.php?operation=askOperation&name=admin&password=1&operationId=${operationId}`;
 
             function checkState() {
@@ -322,11 +324,14 @@
                             if (frame.style.display !== "block") {
                                 frame.style.display = "block";
                             }                        
-                            setTimeout(checkState, 900);
+                            //setTimeout(checkState, 900);
+                            if (monitoring) {
+                                setTimeout(checkState, 900);
+                            }
                         } else if(state === "F"){
-                            alert('Transacción finalizada.');
-                            resetCart(); 
-                            operationId = null;
+                            //alert('Transacción finalizada.');
+                            monitoring = false;
+                            resetCart();
                         }
                     } else {
                         showMessageModal('Error al consultar estado de la transacción.');
