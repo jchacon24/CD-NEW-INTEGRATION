@@ -344,6 +344,11 @@
             updateCart();
             closeMessageModal();
         }
+        //Exponer funciones al scope global para que los onclick funcionen
+        window.addToCart = addToCart;
+        window.selectPaymentMethod = selectPaymentMethod;
+        window.closeMessageModal = closeMessageModal;
+        window.changePaymentMethod = changePaymentMethod;
     </script>
 </body>
 </html>
