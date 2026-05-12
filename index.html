@@ -328,11 +328,21 @@
                                 setTimeout(checkState, 900);
                             }
                         } else if(state === "F"){
-                            //alert('Transacción finalizada.');
                             monitoring = false;
+                        
+                            // Cerrar modal completamente
+                            document.getElementById("dynamicMessageModal").style.display = "none";
+                        
+                            // Ocultar frame
+                            const frame = document.getElementById("cashdroFrame");
+                            frame.style.display = "none";
+                            frame.src = "";
+                        
+                            // Limpiar carrito
                             resetCart();
-                        }
-                    } else {
+                        
+                            operationId = null;
+                        }else {
                         showMessageModal('Error al consultar estado de la transacción.');
                     }
                 })
@@ -379,11 +389,16 @@
             cart = {};
             total = 0;
             updateCart();
-            closeMessageModal();
-            // Ocultar frame al finalizar
+        
+            // Cerrar todos los modales
+            document.getElementById("dynamicMessageModal").style.display = "none";
+            document.getElementById("paymentModal").style.display = "none";
+        
+            // Ocultar iframe
             const frame = document.getElementById("cashdroFrame");
             frame.style.display = "none";
             frame.src = "";
+        
             operationId = null;
         }
         //Exponer funciones al scope global para que los onclick funcionen
