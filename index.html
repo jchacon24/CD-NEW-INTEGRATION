@@ -310,9 +310,15 @@
 
                         if (state === "I") {
                             alert('Estado inesperado. Revisar.');                        
-                        } else if (state === "E") {
-                            alert('Transacción en ejecución.');
-                            setTimeout(checkState, 2000); // Reintentar después de 2 segundos
+                        } //else if (state === "E") {
+                            //alert('Transacción en ejecución.');
+                            //setTimeout(checkState, 2000); // Reintentar después de 2 segundos
+                        else if (state === "E") {
+                            const frame = document.getElementById("cashdroFrame");
+                            if (frame.style.display !== "block") {
+                                frame.style.display = "block";
+                            }                        
+                            setTimeout(checkState, 2000);
                         } else if(state === "F"){
                             alert('Transacción finalizada.');
                             resetCart();   
