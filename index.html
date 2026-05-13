@@ -327,16 +327,20 @@
                             if (monitoring) {
                                 setTimeout(checkState, 900);
                             }
-                        } else if(state === "F"){ 
-                            monitoring = false; 
-                            // Cerrar modal completamente 
-                            document.getElementById("dynamicMessageModal").style.display = "none"; 
-                            // Ocultar 
-                            frame const frame = document.getElementById("cashdroFrame"); 
-                            frame.style.display = "none"; 
-                            frame.src = ""; 
-                            // Limpiar carrito 
-                            resetCart(); 
+                        } else if(state === "F"){
+                            monitoring = false;
+                        
+                            // Cerrar modal completamente
+                            document.getElementById("dynamicMessageModal").style.display = "none";
+                        
+                            // Ocultar frame
+                            const frame = document.getElementById("cashdroFrame");
+                            frame.style.display = "none";
+                            frame.src = "";
+                        
+                            // Limpiar carrito
+                            resetCart();
+                        
                             operationId = null;
                         }else {
                         showMessageModal('Error al consultar estado de la transacción.');
